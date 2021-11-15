@@ -7,6 +7,6 @@ gameAPI/MainService/__pycache__/
 
 #others
 .env
-MainService/migrations/
+gameAPI/MainService/migrations/
 
 
