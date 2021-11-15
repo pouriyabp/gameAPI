@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  gameDB_postgresql:
+    image: postgres:12
+    container_name: game_database
+    volumes:
+      - game_database:/var/lib/postgresql/data
+    restart: always
+    env_file: .env
+    ports:
+      - "5432:5432"
+    networks:
+      - gameDB_network
+
+
+
+volumes:
+  game_database:
+    external: true
+    
+networks:
+  gameDB_network:
+    external: true

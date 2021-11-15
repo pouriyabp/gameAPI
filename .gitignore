@@ -1,3 +1,12 @@
 #database
 db.sqlite3
 
+#python folders
+gameAPI/gameAPI/__pycache__/
+gameAPI/MainService/__pycache__/
+
+#others
+.env
+MainService/migrations/
+
+

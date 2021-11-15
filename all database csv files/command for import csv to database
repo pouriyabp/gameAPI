@@ -1,0 +1,4 @@
+  COPY "MainService_gamesales"("Rank", "Name", "Platform", "Year", "Genre", "Publisher", "NA_Sales", "EU_Sales", "JP_Sales", "Other_Sales", "Global_Sales",id)
+  FROM '/var/lib/postgresql/data/vgsales.csv'
+  DELIMITER ','
+  CSV HEADER;
