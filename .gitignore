@@ -8,5 +8,6 @@ gameAPI/MainService/__pycache__/
 #others
 .env
 gameAPI/MainService/migrations/
+.idea/
 
 
