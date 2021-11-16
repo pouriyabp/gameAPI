@@ -23,7 +23,7 @@ class GamesBasedRankAPI(APIView):
             return Response({'data': data}, status=status.HTTP_200_OK)
 
         except GameSales.DoesNotExist:
-            return Response({'status': f"Game with rank={game_rank} not found!"},
+            return Response({'status': f"Game with rank= '{game_rank}' not found!"},
                             status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'status': f"Error happend!--->{e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -39,13 +39,13 @@ class GamesBasedNameAPI(APIView):
 
             ######################################################################################
             game_name = request.GET['name']
-            # TODO: use both lower case and upper case 
-            games = GameSales.objects.filter(Q(Name__contains=game_name))
+            games = GameSales.objects.filter(Q(Name__icontains=game_name))
             serialized_data = serializers.SingleGameSerializer(games, many=True)
             data = serialized_data.data
+            if len(data) == 0:
+                return Response({'status': f"Game with name= '{game_name}' not found!"},
+                                status=status.HTTP_404_NOT_FOUND)
             return Response({'data': data}, status=status.HTTP_200_OK)
 
-
-
-        except:
-            pass
+        except Exception as e:
+            return Response({'status': f"Error happend!--->{e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
