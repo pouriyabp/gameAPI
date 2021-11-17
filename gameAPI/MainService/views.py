@@ -49,3 +49,27 @@ class GamesBasedNameAPI(APIView):
 
         except Exception as e:
             return Response({'status': f"Error happend!--->{e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class NGamesBasedPlatformAPI(APIView):
+    def get(self, request):
+        try:
+            from django.db.models import Q
+            ######################################################################################
+
+            # authenticate user code
+
+            ######################################################################################
+            number_of_games = request.GET['number']
+            games_platform = request.GET['platform']
+            games = GameSales.objects.filter(Q(Platform__icontains=games_platform)).order_by('Rank')[
+                    :int(number_of_games)]
+            serialized_data = serializers.SingleGameSerializer(games, many=True)
+            data = serialized_data.data
+            if len(data) == 0:
+                return Response({'status': f"Games for platform= '{games_platform}' not found!"},
+                                status=status.HTTP_404_NOT_FOUND)
+            return Response({'data': data}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({'status': f"Error happend!--->{e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
