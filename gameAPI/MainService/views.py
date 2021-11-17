@@ -159,7 +159,7 @@ class GamesEUgtNAAPI(APIView):
             # authenticate user code
 
             ######################################################################################
-            games = GameSales.objects.filter(Q(EU_Sales__gt=F('NA_Sales'))).order_by('Rank')
+            games = GameSales.objects.filter(Q(EU_Sales__gt=F('NA_Sales'))).order_by('Rank')[:20]
             serialized_data = serializers.SingleGameSerializer(games, many=True)
             data = serialized_data.data
             if len(data) == 0:
