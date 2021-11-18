@@ -4,10 +4,12 @@ db.sqlite3
 #python folders
 gameAPI/gameAPI/__pycache__/
 gameAPI/MainService/__pycache__/
+gameAPI/User/__pycache__/
 
 #others
 .env
 gameAPI/MainService/migrations/
+gameAPI/User/migrations/
 .idea/
 
 
