@@ -123,11 +123,11 @@ class YearsSalesAPI(APIView):
             start_year = int(request.GET['start'])
             end_year = int(request.GET['end'])
             year_dict = {}
-            for year in range(start_year, end_year+1):
+            for year in range(start_year, end_year + 1):
                 games = GameSales.objects.filter(Year__iexact=str(year))
-                serialized_data_first_game= serializers.SingleGameSerializer(games, many=True)
+                serialized_data_first_game = serializers.SingleGameSerializer(games, many=True)
                 games_data = serialized_data_first_game.data
-                temp = 0 # for save global sales of one year
+                temp = 0  # for save global sales of one year
                 for game in games_data:
                     temp += game['Global_Sales']
                 year_dict[str(year)] = temp
@@ -137,7 +137,64 @@ class YearsSalesAPI(APIView):
             plt.title(f"Global sales from {start_year} to {end_year} ")
             plt.show()
 
-            return Response({'data':year_dict}, status=status.HTTP_200_OK)
+            return Response({'data': year_dict}, status=status.HTTP_200_OK)
+
+        except GameSales.DoesNotExist:
+            return Response({'status': f"Game with not found!"},
+                            status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'status': f"Error happend!--->{e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class ProducersSalesAPI(APIView):
+    def get(self, request):
+        try:
+            from django.db.models import Q
+            ######################################################################################
+
+            # authenticate user code
+
+            ######################################################################################
+
+            start_year = int(request.GET['start'])
+            end_year = int(request.GET['end'])
+            first_producer = request.GET['producer1']
+            second_producer = request.GET['producer2']
+            producer1_year_dict = {}
+            producer2_year_dict = {}
+            for year in range(start_year, end_year + 1):
+                games1 = GameSales.objects.filter(Q(Year__iexact=str(year)) & Q(Publisher__iexact=first_producer))
+                serialized_data_first_game = serializers.SingleGameSerializer(games1, many=True)
+                games1_data = serialized_data_first_game.data
+                temp = 0  # for save global sales of one year
+                for game in games1_data:
+                    temp += game['Global_Sales']
+                producer1_year_dict[str(year)] = temp
+
+                # do same things for producer 2
+                games2 = GameSales.objects.filter(Q(Year__iexact=str(year)) & Q(Publisher__iexact=second_producer))
+                serialized_data_second_game = serializers.SingleGameSerializer(games2, many=True)
+                games2_data = serialized_data_second_game.data
+                temp = 0  # for save global sales of one year
+                for game in games2_data:
+                    temp += game['Global_Sales']
+                producer2_year_dict[str(year)] = temp
+
+            producer1_list = producer1_year_dict.items()
+            producer1_list = sorted(producer1_list)
+            x, y = zip(*producer1_list)
+
+            producer2_list = producer2_year_dict.items()
+            producer2_list = sorted(producer2_list)
+            x2, y2 = zip(*producer2_list)
+
+            plt.plot(x, y, label=f"{first_producer}")
+            plt.plot(x2, y2, label=f"{second_producer}")
+            plt.title(f'{first_producer} Vs {second_producer} from {start_year} to {end_year}')
+            plt.legend()
+            plt.show()
+
+            return Response({'data1': producer1_year_dict, 'data2': producer2_year_dict}, status=status.HTTP_200_OK)
 
         except GameSales.DoesNotExist:
             return Response({'status': f"Game with not found!"},
