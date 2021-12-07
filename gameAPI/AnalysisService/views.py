@@ -92,8 +92,52 @@ class CompareTwoGamesAPI(APIView):
             plt.xticks(r + width / 2, ['NA_sales', 'EU_Sales', 'JP_Sales', 'Other_Sales', 'Global_Sales'])
             plt.legend()
             plt.show()
+            base64_jpgData = 0
 
-            return Response({'data1': first_game_sales, 'data2': second_game_sales}, status=status.HTTP_200_OK)
+            # convert image to base64 format for api
+            # import base64
+            # import io
+            # my_stringIObytes = io.BytesIO()
+            # plt.savefig(my_stringIObytes, format='jpg')
+            # my_stringIObytes.seek(0)
+            # base64_jpgData = base64.b64encode(my_stringIObytes.read())
+            return Response({'data1': first_game_sales, 'data2': second_game_sales, 'chart': base64_jpgData},
+                            status=status.HTTP_200_OK)
+
+        except GameSales.DoesNotExist:
+            return Response({'status': f"Game with not found!"},
+                            status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'status': f"Error happend!--->{e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class YearsSalesAPI(APIView):
+    def get(self, request):
+        try:
+            ######################################################################################
+
+            # authenticate user code
+
+            ######################################################################################
+
+            start_year = int(request.GET['start'])
+            end_year = int(request.GET['end'])
+            year_dict = {}
+            for year in range(start_year, end_year+1):
+                games = GameSales.objects.filter(Year__iexact=str(year))
+                serialized_data_first_game= serializers.SingleGameSerializer(games, many=True)
+                games_data = serialized_data_first_game.data
+                temp = 0 # for save global sales of one year
+                for game in games_data:
+                    temp += game['Global_Sales']
+                year_dict[str(year)] = temp
+
+            plt.bar(range(len(year_dict)), list(year_dict.values()), align='center')
+            plt.xticks(range(len(year_dict)), list(year_dict.keys()))
+            plt.title(f"Global sales from {start_year} to {end_year} ")
+            plt.show()
+
+            return Response({'data':year_dict}, status=status.HTTP_200_OK)
 
         except GameSales.DoesNotExist:
             return Response({'status': f"Game with not found!"},
