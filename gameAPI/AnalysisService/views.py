@@ -201,3 +201,39 @@ class ProducersSalesAPI(APIView):
                             status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'status': f"Error happend!--->{e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class CategorySalesAPI(APIView):
+    def get(self, request):
+        try:
+            from django.db.models import Q
+            ######################################################################################
+
+            # authenticate user code
+
+            ######################################################################################
+
+            start_year = int(request.GET['start'])
+            end_year = int(request.GET['end'])
+            genre_list = GameSales.objects.values_list('Genre', flat=True).distinct()
+            dict_of_genre = {i: 0 for i in genre_list}
+            for year in range(start_year, end_year + 1):
+                for genre in genre_list:
+                    games = GameSales.objects.filter(Q(Year__iexact=str(year)) & Q(Genre__iexact=genre))
+                    serialized_data_first_game = serializers.SingleGameSerializer(games, many=True)
+                    games_data = serialized_data_first_game.data
+                    for game in games_data:
+                        dict_of_genre[genre] += game['Global_Sales']
+
+            plt.bar(range(len(dict_of_genre)), list(dict_of_genre.values()), align='center')
+            plt.xticks(range(len(dict_of_genre)), list(dict_of_genre.keys()))
+            plt.title(f"Genre sales from {start_year} to {end_year} ")
+            plt.show()
+
+            return Response({'data': dict_of_genre}, status=status.HTTP_200_OK)
+
+        except GameSales.DoesNotExist:
+            return Response({'status': f"Game with not found!"},
+                            status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'status': f"Error happend!--->{e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
