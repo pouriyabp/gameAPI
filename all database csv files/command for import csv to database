@@ -2,3 +2,9 @@
   FROM '/var/lib/postgresql/data/vgsales.csv'
   DELIMITER ','
   CSV HEADER;
+
+
+
+##################################################################################
+#place that must copy the csv file is /var/lib/docker/volumes/"image name"/_data #
+##################################################################################
