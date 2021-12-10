@@ -5,6 +5,8 @@ from rest_framework import status
 from MainService import serializers
 import matplotlib.pyplot as plt
 import numpy as np
+from User.models import SignUp
+from User.serializers import SingleUserSerializer
 
 
 # Create your views here.
@@ -14,7 +16,18 @@ class CompareTwoGamesAPI(APIView):
         try:
             ######################################################################################
 
-            # authenticate user code
+            enteredUname = request.GET['user']
+            enteredToken = request.GET['token']
+
+            user = SignUp.objects.using('users').get(Username=enteredUname)
+            userSerialized = SingleUserSerializer(user)
+            data = userSerialized.data
+            
+
+            if enteredToken != data['TokenPublic']:
+
+                return Response({'Wrong Token. Please Enter Right Token!'}, status=status.HTTP_403_FORBIDDEN)
+
 
             ######################################################################################
 
@@ -104,6 +117,10 @@ class CompareTwoGamesAPI(APIView):
             return Response({'data1': first_game_sales, 'data2': second_game_sales, 'chart': base64_jpgData},
                             status=status.HTTP_200_OK)
 
+        except SignUp.DoesNotExist:
+            return Response({'status': f"User not found in Database!"},
+                        status=status.HTTP_404_NOT_FOUND)
+
         except GameSales.DoesNotExist:
             return Response({'status': f"Game with not found!"},
                             status=status.HTTP_404_NOT_FOUND)
@@ -116,7 +133,18 @@ class YearsSalesAPI(APIView):
         try:
             ######################################################################################
 
-            # authenticate user code
+            enteredUname = request.GET['user']
+            enteredToken = request.GET['token']
+
+            user = SignUp.objects.using('users').get(Username=enteredUname)
+            userSerialized = SingleUserSerializer(user)
+            data = userSerialized.data
+            
+
+            if enteredToken != data['TokenPublic']:
+
+                return Response({'Wrong Token. Please Enter Right Token!'}, status=status.HTTP_403_FORBIDDEN)
+
 
             ######################################################################################
 
@@ -139,6 +167,10 @@ class YearsSalesAPI(APIView):
 
             return Response({'data': year_dict}, status=status.HTTP_200_OK)
 
+        except SignUp.DoesNotExist:
+            return Response({'status': f"User not found in Database!"},
+                        status=status.HTTP_404_NOT_FOUND)
+
         except GameSales.DoesNotExist:
             return Response({'status': f"Game with not found!"},
                             status=status.HTTP_404_NOT_FOUND)
@@ -152,7 +184,18 @@ class ProducersSalesAPI(APIView):
             from django.db.models import Q
             ######################################################################################
 
-            # authenticate user code
+            enteredUname = request.GET['user']
+            enteredToken = request.GET['token']
+
+            user = SignUp.objects.using('users').get(Username=enteredUname)
+            userSerialized = SingleUserSerializer(user)
+            data = userSerialized.data
+            
+
+            if enteredToken != data['TokenPublic']:
+
+                return Response({'Wrong Token. Please Enter Right Token!'}, status=status.HTTP_403_FORBIDDEN)
+
 
             ######################################################################################
 
@@ -196,6 +239,10 @@ class ProducersSalesAPI(APIView):
 
             return Response({'data1': producer1_year_dict, 'data2': producer2_year_dict}, status=status.HTTP_200_OK)
 
+        except SignUp.DoesNotExist:
+            return Response({'status': f"User not found in Database!"},
+                        status=status.HTTP_404_NOT_FOUND)
+        
         except GameSales.DoesNotExist:
             return Response({'status': f"Game with not found!"},
                             status=status.HTTP_404_NOT_FOUND)
@@ -209,7 +256,18 @@ class CategorySalesAPI(APIView):
             from django.db.models import Q
             ######################################################################################
 
-            # authenticate user code
+            enteredUname = request.GET['user']
+            enteredToken = request.GET['token']
+
+            user = SignUp.objects.using('users').get(Username=enteredUname)
+            userSerialized = SingleUserSerializer(user)
+            data = userSerialized.data
+            
+
+            if enteredToken != data['TokenPublic']:
+
+                return Response({'Wrong Token. Please Enter Right Token!'}, status=status.HTTP_403_FORBIDDEN)
+
 
             ######################################################################################
 
@@ -232,6 +290,10 @@ class CategorySalesAPI(APIView):
 
             return Response({'data': dict_of_genre}, status=status.HTTP_200_OK)
 
+        except SignUp.DoesNotExist:
+            return Response({'status': f"User not found in Database!"},
+                        status=status.HTTP_404_NOT_FOUND)
+        
         except GameSales.DoesNotExist:
             return Response({'status': f"Game with not found!"},
                             status=status.HTTP_404_NOT_FOUND)

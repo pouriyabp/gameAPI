@@ -119,7 +119,18 @@ class NGamesBasedPlatformAPI(APIView):
             from django.db.models import Q
             ######################################################################################
 
-            # authenticate user code
+            enteredUname = request.GET['user']
+            enteredToken = request.GET['token']
+
+            user = SignUp.objects.using('users').get(Username=enteredUname)
+            userSerialized = SingleUserSerializer(user)
+            data = userSerialized.data
+            
+
+            if enteredToken != data['TokenPublic']:
+
+                return Response({'Wrong Token. Please Enter Right Token!'}, status=status.HTTP_403_FORBIDDEN)
+
 
             ######################################################################################
             number_of_games = request.GET['number']
@@ -133,6 +144,10 @@ class NGamesBasedPlatformAPI(APIView):
                                 status=status.HTTP_404_NOT_FOUND)
             return Response({'data': data}, status=status.HTTP_200_OK)
 
+        except SignUp.DoesNotExist:
+            return Response({'status': f"User not found in Database!"},
+                        status=status.HTTP_404_NOT_FOUND)
+
         except Exception as e:
             return Response({'status': f"Error happend!--->{e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -143,7 +158,18 @@ class NGamesBasedYearAPI(APIView):
             from django.db.models import Q
             ######################################################################################
 
-            # authenticate user code
+            enteredUname = request.GET['user']
+            enteredToken = request.GET['token']
+
+            user = SignUp.objects.using('users').get(Username=enteredUname)
+            userSerialized = SingleUserSerializer(user)
+            data = userSerialized.data
+            
+
+            if enteredToken != data['TokenPublic']:
+
+                return Response({'Wrong Token. Please Enter Right Token!'}, status=status.HTTP_403_FORBIDDEN)
+
 
             ######################################################################################
             number_of_games = request.GET['number']
@@ -157,6 +183,10 @@ class NGamesBasedYearAPI(APIView):
                                 status=status.HTTP_404_NOT_FOUND)
             return Response({'data': data}, status=status.HTTP_200_OK)
 
+        except SignUp.DoesNotExist:
+            return Response({'status': f"User not found in Database!"},
+                        status=status.HTTP_404_NOT_FOUND)
+
         except Exception as e:
             return Response({'status': f"Error happend!--->{e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -167,7 +197,18 @@ class NGamesBasedGenreAPI(APIView):
             from django.db.models import Q
             ######################################################################################
 
-            # authenticate user code
+            enteredUname = request.GET['user']
+            enteredToken = request.GET['token']
+
+            user = SignUp.objects.using('users').get(Username=enteredUname)
+            userSerialized = SingleUserSerializer(user)
+            data = userSerialized.data
+            
+
+            if enteredToken != data['TokenPublic']:
+
+                return Response({'Wrong Token. Please Enter Right Token!'}, status=status.HTTP_403_FORBIDDEN)
+
 
             ######################################################################################
             number_of_games = request.GET['number']
@@ -181,6 +222,10 @@ class NGamesBasedGenreAPI(APIView):
                                 status=status.HTTP_404_NOT_FOUND)
             return Response({'data': data}, status=status.HTTP_200_OK)
 
+        except SignUp.DoesNotExist:
+            return Response({'status': f"User not found in Database!"},
+                        status=status.HTTP_404_NOT_FOUND)
+
         except Exception as e:
             return Response({'status': f"Error happend!--->{e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -191,7 +236,18 @@ class FiveTopGamesAPI(APIView):
             from django.db.models import Q
             ######################################################################################
 
-            # authenticate user code
+            enteredUname = request.GET['user']
+            enteredToken = request.GET['token']
+
+            user = SignUp.objects.using('users').get(Username=enteredUname)
+            userSerialized = SingleUserSerializer(user)
+            data = userSerialized.data
+            
+
+            if enteredToken != data['TokenPublic']:
+
+                return Response({'Wrong Token. Please Enter Right Token!'}, status=status.HTTP_403_FORBIDDEN)
+
 
             ######################################################################################
             games_platform = request.GET['platform']
@@ -207,6 +263,10 @@ class FiveTopGamesAPI(APIView):
                               f"and year= {games_year} not found!"}, status=status.HTTP_404_NOT_FOUND)
             return Response({'data': data}, status=status.HTTP_200_OK)
 
+        except SignUp.DoesNotExist:
+            return Response({'status': f"User not found in Database!"},
+                        status=status.HTTP_404_NOT_FOUND)
+
         except Exception as e:
             return Response({'status': f"Error happend!--->{e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -218,7 +278,18 @@ class GamesEUgtNAAPI(APIView):
             from django.db.models import F
             ######################################################################################
 
-            # authenticate user code
+            enteredUname = request.GET['user']
+            enteredToken = request.GET['token']
+
+            user = SignUp.objects.using('users').get(Username=enteredUname)
+            userSerialized = SingleUserSerializer(user)
+            data = userSerialized.data
+            
+
+            if enteredToken != data['TokenPublic']:
+
+                return Response({'Wrong Token. Please Enter Right Token!'}, status=status.HTTP_403_FORBIDDEN)
+
 
             ######################################################################################
             games = GameSales.objects.filter(Q(EU_Sales__gt=F('NA_Sales'))).order_by('Rank')[:20]
@@ -227,6 +298,10 @@ class GamesEUgtNAAPI(APIView):
             if len(data) == 0:
                 return Response({'status': f"No games found that EU sales is greater than NA sales."})
             return Response({'data': data}, status=status.HTTP_200_OK)
+
+        except SignUp.DoesNotExist:
+            return Response({'status': f"User not found in Database!"},
+                        status=status.HTTP_404_NOT_FOUND)
 
         except Exception as e:
             return Response({'status': f"Error happend!--->{e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
