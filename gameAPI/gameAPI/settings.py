@@ -37,9 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework.authtoken',
     'rest_framework',
     'MainService',
+<<<<<<< HEAD
+    'User'
+=======
     'AnalysisService',
+>>>>>>> 98a0238f5b598994a9f51ef0e5c8ba0b166f5639
 ]
 
 MIDDLEWARE = [
@@ -84,6 +89,15 @@ DATABASES = {
         'PASSWORD': 'postgres',
         'HOST': 'localhost',
         'PORT': '5432',
+    },
+
+    'users': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost',
+        'PORT': '5431',
     }
 }
 
