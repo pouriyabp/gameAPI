@@ -2,7 +2,7 @@ version: '3'
 
 services:
   gameDB_postgresql:
-    image: postgres:14
+    image: postgres:12
     container_name: game_database
     volumes:
       - game_database:/var/lib/postgresql/data
@@ -14,7 +14,7 @@ services:
       - gameDB_network
 
   userDB_postgresql:
-    image: postgres:14
+    image: postgres:12
     container_name: user_database
     volumes:
       - user_database:/var/lib/postgresql/data
@@ -24,6 +24,15 @@ services:
       - "5431:5432"
     networks:
       - userDB_network
+  api:
+    build: .
+    command: python gameAPI/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    
+    
 
 
 volumes:
