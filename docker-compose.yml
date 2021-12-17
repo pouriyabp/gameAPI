@@ -29,9 +29,15 @@ services:
     command: python gameAPI/manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
+    restart: always
     ports:
       - "8000:8000"
-    
+    networks:
+      - gameDB_network
+      - userDB_network
+    depends_on:
+      - gameDB_postgresql
+      - userDB_postgresql
     
 
 

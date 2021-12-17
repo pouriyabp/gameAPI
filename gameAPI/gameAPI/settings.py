@@ -84,7 +84,7 @@ DATABASES = {
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'localhost',
+        'HOST': 'gameDB_postgresql',
         'PORT': '5432',
     },
 
@@ -93,8 +93,8 @@ DATABASES = {
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'localhost',
-        'PORT': '5431',
+        'HOST': 'userDB_postgresql',
+        'PORT': '5432',
     }
 }
 
