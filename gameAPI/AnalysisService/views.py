@@ -108,12 +108,18 @@ class CompareTwoGamesAPI(APIView):
             base64_jpgData = 0
 
             # convert image to base64 format for api
-            # import base64
-            # import io
-            # my_stringIObytes = io.BytesIO()
-            # plt.savefig(my_stringIObytes, format='jpg')
-            # my_stringIObytes.seek(0)
-            # base64_jpgData = base64.b64encode(my_stringIObytes.read())
+            import base64
+            import io
+            my_stringIObytes = io.BytesIO()
+            plt.savefig(my_stringIObytes, format='jpg')
+            my_stringIObytes.seek(0)
+            base64_jpgData = base64.b64encode(my_stringIObytes.read())
+
+            plt.clf()
+            plt.cla()
+            my_stringIObytes.flush()
+            my_stringIObytes.close()
+        
             return Response({'data1': first_game_sales, 'data2': second_game_sales, 'chart': base64_jpgData},
                             status=status.HTTP_200_OK)
 
@@ -164,8 +170,21 @@ class YearsSalesAPI(APIView):
             plt.xticks(range(len(year_dict)), list(year_dict.keys()))
             plt.title(f"Global sales from {start_year} to {end_year} ")
             plt.show()
+            base64_jpgData = 0
 
-            return Response({'data': year_dict}, status=status.HTTP_200_OK)
+            # convert image to base64 format for api
+            import base64
+            import io
+            my_stringIObytes = io.BytesIO()
+            plt.savefig(my_stringIObytes, format='jpg')
+            my_stringIObytes.seek(0)
+            base64_jpgData = base64.b64encode(my_stringIObytes.read())
+            plt.clf()
+            plt.cla()
+            my_stringIObytes.flush()
+            my_stringIObytes.close()
+
+            return Response({'data': year_dict, 'chart': base64_jpgData}, status=status.HTTP_200_OK)
 
         except SignUp.DoesNotExist:
             return Response({'status': f"User not found in Database!"},
@@ -236,8 +255,22 @@ class ProducersSalesAPI(APIView):
             plt.title(f'{first_producer} Vs {second_producer} from {start_year} to {end_year}')
             plt.legend()
             plt.show()
+            base64_jpgData = 0
 
-            return Response({'data1': producer1_year_dict, 'data2': producer2_year_dict}, status=status.HTTP_200_OK)
+
+            # convert image to base64 format for api
+            import base64
+            import io
+            my_stringIObytes = io.BytesIO()
+            plt.savefig(my_stringIObytes, format='jpg')
+            my_stringIObytes.seek(0)
+            base64_jpgData = base64.b64encode(my_stringIObytes.read())
+            plt.clf()
+            plt.cla()
+            my_stringIObytes.flush()
+            my_stringIObytes.close()
+
+            return Response({'data1': producer1_year_dict, 'data2': producer2_year_dict, 'chart': base64_jpgData}, status=status.HTTP_200_OK)
 
         except SignUp.DoesNotExist:
             return Response({'status': f"User not found in Database!"},
@@ -287,8 +320,25 @@ class CategorySalesAPI(APIView):
             plt.xticks(range(len(dict_of_genre)), list(dict_of_genre.keys()))
             plt.title(f"Genre sales from {start_year} to {end_year} ")
             plt.show()
+            base64_jpgData = 0
 
-            return Response({'data': dict_of_genre}, status=status.HTTP_200_OK)
+            # convert image to base64 format for api
+            import base64
+            import io
+            my_stringIObytes = io.BytesIO()
+            plt.savefig(my_stringIObytes, format='jpg')
+            my_stringIObytes.seek(0)
+            base64_jpgData = base64.b64encode(my_stringIObytes.read())
+            plt.clf()
+            plt.cla()
+            my_stringIObytes.flush()
+            my_stringIObytes.close()
+
+
+
+
+
+            return Response({'data': dict_of_genre, 'chart': base64_jpgData}, status=status.HTTP_200_OK)
 
         except SignUp.DoesNotExist:
             return Response({'status': f"User not found in Database!"},
