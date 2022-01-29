@@ -26,6 +26,7 @@ services:
       - userDB_network
   api:
     build: .
+    container_name: main_service
     command: python gameAPI/manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
@@ -38,6 +39,24 @@ services:
     depends_on:
       - gameDB_postgresql
       - userDB_postgresql
+      
+  analys_api:
+    build: .
+    container_name: analys_service
+    command: python gameAPI/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    restart: always
+    ports:
+      - "8001:8000"
+    networks:
+      - gameDB_network
+      - userDB_network
+    depends_on:
+      - gameDB_postgresql
+      - userDB_postgresql
+    
+    
     
 
 
